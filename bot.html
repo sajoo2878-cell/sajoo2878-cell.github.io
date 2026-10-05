@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -294,6 +293,8 @@ body{
 }
 
 </style>
+
+
 <!-- OneSignal -->
 
 <script
@@ -314,8 +315,10 @@ OneSignalDeferred.push(
         try{
 
             await OneSignal.init({
+
                 appId:
                     "092fc306-c2ab-4a85-a3f9-ff8b50dd8833"
+
             });
 
             window.OneSignalInstance =
@@ -582,13 +585,13 @@ OneSignalDeferred.push(
             </div>
 
             <div
-                id="trend1h"
+                id="trend60"
                 class="box-value">
                 -
             </div>
 
             <div
-                id="detail1h"
+                id="detail60"
                 class="small">
                 -
             </div>
@@ -605,7 +608,7 @@ OneSignalDeferred.push(
 <div class="card">
 
     <h3>
-        المؤشرات
+        المؤشرات الفنية
     </h3>
 
     <div class="grid">
@@ -613,7 +616,7 @@ OneSignalDeferred.push(
         <div class="box">
 
             <div class="box-title">
-                RSI
+                RSI 5M
             </div>
 
             <div
@@ -673,7 +676,7 @@ OneSignalDeferred.push(
         <div class="box">
 
             <div class="box-title">
-                EMA20
+                EMA 20
             </div>
 
             <div
@@ -688,7 +691,7 @@ OneSignalDeferred.push(
         <div class="box">
 
             <div class="box-title">
-                EMA50
+                EMA 50
             </div>
 
             <div
@@ -699,25 +702,12 @@ OneSignalDeferred.push(
 
         </div>
 
-
-        <div class="box">
-
-            <div class="box-title">
-                EMA200
-            </div>
-
-            <div
-                id="ema200"
-                class="box-value">
-                -
-            </div>
-
-        </div>
-
     </div>
 
 </div>
-<!-- SUPPORT / RESISTANCE -->
+
+
+<!-- SUPPORT RESISTANCE -->
 
 <div class="card">
 
@@ -731,13 +721,11 @@ OneSignalDeferred.push(
             Resistance 2
         </span>
 
-        <span
-            id="r2">
+        <span id="r2">
             -
         </span>
 
     </div>
-
 
     <div class="level">
 
@@ -745,27 +733,23 @@ OneSignalDeferred.push(
             Resistance 1
         </span>
 
-        <span
-            id="r1">
+        <span id="r1">
             -
         </span>
 
     </div>
-
 
     <div class="level">
 
         <span>
-            Pivot
+            السعر الحالي
         </span>
 
-        <span
-            id="pivot">
+        <span id="currentLevel">
             -
         </span>
 
     </div>
-
 
     <div class="level">
 
@@ -773,13 +757,11 @@ OneSignalDeferred.push(
             Support 1
         </span>
 
-        <span
-            id="s1">
+        <span id="s1">
             -
         </span>
 
     </div>
-
 
     <div class="level">
 
@@ -787,8 +769,7 @@ OneSignalDeferred.push(
             Support 2
         </span>
 
-        <span
-            id="s2">
+        <span id="s2">
             -
         </span>
 
@@ -797,12 +778,12 @@ OneSignalDeferred.push(
 </div>
 
 
-<!-- MARKET ANALYSIS -->
+<!-- MARKET -->
 
 <div class="card">
 
     <h3>
-        تحليل السوق
+        قوة السوق
     </h3>
 
     <div class="grid">
@@ -894,8 +875,8 @@ OneSignalDeferred.push(
 </div>
 
 
-<!-- SIGNAL LOG / BACKTEST -->
 
+<!-- SIGNAL LOG / BACKTEST -->
 <div class="card">
 
     <h3>
@@ -905,74 +886,32 @@ OneSignalDeferred.push(
     <div class="grid">
 
         <div class="box">
-
-            <div class="box-title">
-                إجمالي الإشارات
-            </div>
-
-            <div
-                id="logTotal"
-                class="box-value">
-                0
-            </div>
-
+            <div class="box-title">إجمالي الإشارات</div>
+            <div id="logTotal" class="box-value">0</div>
         </div>
 
-
         <div class="box">
-
-            <div class="box-title">
-                ناجحة
-            </div>
-
-            <div
-                id="logWins"
-                class="box-value green">
-                0
-            </div>
-
+            <div class="box-title">ناجحة</div>
+            <div id="logWins" class="box-value green">0</div>
         </div>
 
-
         <div class="box">
-
-            <div class="box-title">
-                خاسرة
-            </div>
-
-            <div
-                id="logLosses"
-                class="box-value red">
-                0
-            </div>
-
+            <div class="box-title">خاسرة</div>
+            <div id="logLosses" class="box-value red">0</div>
         </div>
 
-
         <div class="box">
-
-            <div class="box-title">
-                قيد المتابعة
-            </div>
-
-            <div
-                id="logPending"
-                class="box-value yellow">
-                0
-            </div>
-
+            <div class="box-title">قيد المتابعة</div>
+            <div id="logPending" class="box-value yellow">0</div>
         </div>
 
     </div>
-
 
     <div
         id="signalLog"
         class="news"
         style="margin-top:12px;">
-
         لا توجد إشارات مسجلة بعد
-
     </div>
 
 </div>
@@ -1111,23 +1050,29 @@ let marketPrice = 0;
 let marketTick = null;
 
 let marketData = {
+
     "5M":[],
     "15M":[],
     "30M":[],
     "1H":[]
+
 };
 
-let newsBlocked = false;
+let currentSignal =
+    "WAIT";
 
-let currentSignal = "WAIT";
-
-let lastSignal = "WAIT";
 
 let signalHistory = JSON.parse(
     localStorage.getItem("xauusd_signal_history") || "[]"
 );
 
 const SIGNAL_HISTORY_LIMIT = 50;
+
+let lastSignal =
+    "WAIT";
+
+let newsBlocked =
+    false;
 
 
 /* =========================================================
@@ -1141,15 +1086,14 @@ function $(id){
 }
 
 
-function setText(id,text){
+function setText(id,value){
 
-    const el =
-        $(id);
+    const el = $(id);
 
     if(el){
 
         el.textContent =
-            text;
+            value;
 
     }
 
@@ -1158,17 +1102,18 @@ function setText(id,text){
 
 function priceFormat(value){
 
+    const n =
+        Number(value);
+
     if(
-        value === null ||
-        value === undefined ||
-        !isFinite(value)
+        !Number.isFinite(n)
     ){
 
         return "-";
 
     }
 
-    return Number(value).toFixed(2);
+    return n.toFixed(2);
 
 }
 
@@ -1176,11 +1121,35 @@ function priceFormat(value){
 function escapeHTML(value){
 
     return String(value)
+
         .replace(/&/g,"&amp;")
+
         .replace(/</g,"&lt;")
+
         .replace(/>/g,"&gt;")
+
         .replace(/"/g,"&quot;")
+
         .replace(/'/g,"&#039;");
+
+}
+
+
+function average(values){
+
+    if(
+        !values ||
+        !values.length
+    ){
+
+        return null;
+
+    }
+
+    return values.reduce(
+        (a,b)=>a+b,
+        0
+    ) / values.length;
 
 }
 
@@ -1195,39 +1164,56 @@ async function getPrice(){
 
         const response =
             await fetch(
-                API +
-                "/" +
-                SYMBOL +
-                "?allowStale=true"
+                `${API}/${SYMBOL}?allowStale=true`,
+                {
+                    cache:"no-store"
+                }
             );
+
+        if(!response.ok){
+
+            throw new Error(
+                "Price HTTP " +
+                response.status
+            );
+
+        }
 
         const data =
             await response.json();
 
-        marketTick =
-            data;
-
         const price =
             Number(
-                data.price ??
-                data.close ??
+                data.mid ??
                 data.bid ??
-                data.last
+                data.ask
             );
 
         if(
-            isFinite(price)
+            !Number.isFinite(price)
         ){
 
-            marketPrice =
-                price;
-
-            setText(
-                "price",
-                priceFormat(price)
+            throw new Error(
+                "Invalid price"
             );
 
         }
+
+        marketPrice =
+            price;
+
+        marketTick =
+            data;
+
+        setText(
+            "price",
+            priceFormat(price)
+        );
+
+        setText(
+            "currentLevel",
+            priceFormat(price)
+        );
 
         if(
             data.marketState ===
@@ -1236,7 +1222,18 @@ async function getPrice(){
 
             setText(
                 "priceStatus",
-                "السوق مغلق • آخر سعر معروف"
+                "🟡 السوق مغلق • آخر سعر معروف"
+            );
+
+        }
+
+        else if(
+            data.stale
+        ){
+
+            setText(
+                "priceStatus",
+                "🟡 السعر قديم مؤقتاً"
             );
 
         }
@@ -1245,10 +1242,12 @@ async function getPrice(){
 
             setText(
                 "priceStatus",
-                "🟢 السوق مفتوح"
+                "🟢 السعر مباشر"
             );
 
         }
+
+        return price;
 
     }
 
@@ -1261,8 +1260,10 @@ async function getPrice(){
 
         setText(
             "priceStatus",
-            "تعذر جلب السعر"
+            "🔴 فشل جلب السعر"
         );
+
+        return null;
 
     }
 
@@ -1270,50 +1271,131 @@ async function getPrice(){
 
 
 /* =========================================================
-   CANDLE DATA
+   CANDLES
 ========================================================= */
 
-async function getCandles(interval){
+function normalizeCandles(data){
+
+    if(
+        !data ||
+        !Array.isArray(data.bars)
+    ){
+
+        return [];
+
+    }
+
+    return data.bars
+
+        .map(function(c){
+
+            return {
+
+                time:
+                    Date.parse(
+                        c.openTime
+                    ),
+
+                open:
+                    Number(c.open),
+
+                high:
+                    Number(c.high),
+
+                low:
+                    Number(c.low),
+
+                close:
+                    Number(c.close),
+
+                isOpen:
+                    Boolean(c.isOpen)
+
+            };
+
+        })
+
+        .filter(function(c){
+
+            return (
+
+                Number.isFinite(c.time) &&
+
+                Number.isFinite(c.open) &&
+
+                Number.isFinite(c.high) &&
+
+                Number.isFinite(c.low) &&
+
+                Number.isFinite(c.close)
+
+            );
+
+        })
+
+        .sort(
+            (a,b)=>
+                a.time-b.time
+        );
+
+}
+
+
+async function getTimeframe(
+    label,
+    interval
+){
 
     try{
 
         const response =
             await fetch(
-                API +
-                "/XAUUSD/ohlc" +
-                "?interval=" +
-                interval +
-                "&limit=300"
+                `${API}/${SYMBOL}/ohlc?interval=${interval}&limit=300`,
+                {
+                    cache:"no-store"
+                }
             );
+
+        if(!response.ok){
+
+            throw new Error(
+                "OHLC HTTP " +
+                response.status
+            );
+
+        }
 
         const data =
             await response.json();
 
-        let candles =
-            Array.isArray(data)
-            ? data
-            : (
-                data.data ||
-                data.candles ||
-                []
-            );
+        /*
+          نستبعد الشمعة المفتوحة
+          حتى لا تدخل حركة الشمعة الحالية
+          في المؤشرات بشكل مضلل.
+        */
 
-        candles =
-            candles.filter(
+        const bars =
+            normalizeCandles(data)
+            .filter(
                 c => !c.isOpen
             );
 
-        return candles;
+        marketData[label] =
+            bars;
+
+        return bars;
 
     }
 
     catch(error){
 
         console.error(
-            "Candle error:",
-            interval,
+            label,
             error
         );
+
+        marketData[label] =
+            [];
 
         return [];
 
@@ -1324,24 +1406,74 @@ async function getCandles(interval){
 
 async function getAllTimeframes(){
 
-    for(
-        const [name,interval]
-        of Object.entries(TIMEFRAMES)
+    const labels =
+        Object.keys(
+            TIMEFRAMES
+        );
+
+    const results =
+        await Promise.all(
+            labels.map(
+                label =>
+                    getTimeframe(
+                        label,
+                        TIMEFRAMES[label]
+                    )
+            )
+        );
+
+    return results;
+
+}
+
+
+/* =========================================================
+   SMA
+========================================================= */
+
+function sma(
+    values,
+    period
+){
+
+    if(
+        !values ||
+        values.length < period
     ){
 
-        marketData[name] =
-            await getCandles(
-                interval
-            );
+        return null;
 
     }
 
+    let sum = 0;
+
+    for(
+        let i =
+            values.length-period;
+
+        i < values.length;
+
+        i++
+    ){
+
+        sum +=
+            values[i];
+
+    }
+
+    return sum / period;
+
 }
+
+
 /* =========================================================
-   INDICATORS
+   EMA
 ========================================================= */
 
-function calculateEMA(values, period){
+function ema(
+    values,
+    period
+){
 
     if(
         !values ||
@@ -1356,39 +1488,46 @@ function calculateEMA(values, period){
         2 /
         (period + 1);
 
-    let ema =
-        values
-        .slice(0,period)
-        .reduce(
-            (sum,value) =>
-                sum + value,
-            0
-        ) /
-        period;
+    let result =
+        sma(
+            values.slice(
+                0,
+                period
+            ),
+            period
+        );
 
     for(
         let i = period;
+
         i < values.length;
+
         i++
     ){
 
-        ema =
+        result =
             values[i] * k +
-            ema * (1-k);
+            result * (1-k);
 
     }
 
-    return ema;
+    return result;
 
 }
 
 
-function calculateRSI(values, period=14){
+/* =========================================================
+   RSI
+========================================================= */
+
+function calculateRSI(
+    values,
+    period=14
+){
 
     if(
         !values ||
-        values.length <
-        period + 1
+        values.length < period+1
     ){
 
         return 50;
@@ -1396,11 +1535,17 @@ function calculateRSI(values, period=14){
     }
 
     let gains = 0;
+
     let losses = 0;
 
+    const start =
+        values.length-period;
+
     for(
-        let i = 1;
-        i <= period;
+        let i = start;
+
+        i < values.length;
+
         i++
     ){
 
@@ -1410,168 +1555,34 @@ function calculateRSI(values, period=14){
 
         if(change > 0){
 
-            gains += change;
+            gains +=
+                change;
 
         }
 
         else{
 
-            losses -= change;
+            losses +=
+                Math.abs(change);
 
         }
 
     }
 
-    let avgGain =
-        gains / period;
-
-    let avgLoss =
-        losses / period;
-
-    for(
-        let i = period + 1;
-        i < values.length;
-        i++
-    ){
-
-        const change =
-            values[i] -
-            values[i-1];
-
-        const gain =
-            Math.max(
-                change,
-                0
-            );
-
-        const loss =
-            Math.max(
-                -change,
-                0
-            );
-
-        avgGain =
-            (
-                avgGain *
-                (period-1) +
-                gain
-            ) /
-            period;
-
-        avgLoss =
-            (
-                avgLoss *
-                (period-1) +
-                loss
-            ) /
-            period;
-
-    }
-
-    if(avgLoss === 0){
+    if(losses === 0){
 
         return 100;
 
     }
 
     const rs =
-        avgGain /
-        avgLoss;
+        gains /
+        losses;
 
-    return 100 -
-        (
-            100 /
-            (1 + rs)
-        );
-
-}
-
-
-function calculateATR(candles, period=14){
-
-    if(
-        !candles ||
-        candles.length <
-        period + 1
-    ){
-
-        return 0;
-
-    }
-
-    const tr = [];
-
-    for(
-        let i = 1;
-        i < candles.length;
-        i++
-    ){
-
-        const high =
-            Number(candles[i].high);
-
-        const low =
-            Number(candles[i].low);
-
-        const previousClose =
-            Number(
-                candles[i-1].close
-            );
-
-        const trueRange =
-            Math.max(
-                high - low,
-                Math.abs(
-                    high -
-                    previousClose
-                ),
-                Math.abs(
-                    low -
-                    previousClose
-                )
-            );
-
-        tr.push(
-            trueRange
-        );
-
-    }
-
-    if(
-        tr.length < period
-    ){
-
-        return 0;
-
-    }
-
-    let atr =
-        tr
-        .slice(0,period)
-        .reduce(
-            (sum,value) =>
-                sum + value,
-            0
-        ) /
-        period;
-
-    for(
-        let i = period;
-        i < tr.length;
-        i++
-    ){
-
-        atr =
-            (
-                atr *
-                (period-1) +
-                tr[i]
-            ) /
-            period;
-
-    }
-
-    return atr;
+    return (
+        100 -
+        (100/(1+rs))
+    );
 
 }
 
@@ -1580,39 +1591,155 @@ function calculateATR(candles, period=14){
    MACD
 ========================================================= */
 
-function calculateMACD(values){
+function calculateMACD(
+    values
+){
 
     if(
         !values ||
-        values.length < 35
+        values.length < 40
     ){
 
-        return 0;
+        return {
+
+            macd:0,
+            signal:0,
+            histogram:0
+
+        };
 
     }
 
     const ema12 =
-        calculateEMA(
-            values,
-            12
-        );
+        [];
 
     const ema26 =
-        calculateEMA(
-            values,
-            26
-        );
+        [];
 
-    if(
-        ema12 === null ||
-        ema26 === null
+    const k12 =
+        2/13;
+
+    const k26 =
+        2/27;
+
+    let e12 =
+        values[0];
+
+    let e26 =
+        values[0];
+
+    for(
+        let i=0;
+
+        i<values.length;
+
+        i++
     ){
 
-        return 0;
+        e12 =
+            values[i]*k12 +
+            e12*(1-k12);
+
+        e26 =
+            values[i]*k26 +
+            e26*(1-k26);
+
+        ema12.push(e12);
+        ema26.push(e26);
 
     }
 
-    return ema12 - ema26;
+    const macdValues =
+        ema12.map(
+            (v,i)=>
+                v-ema26[i]
+        );
+
+    const signal =
+        ema(
+            macdValues,
+            9
+        );
+
+    const macd =
+        macdValues[
+            macdValues.length-1
+        ];
+
+    return {
+
+        macd,
+        signal:
+            signal ?? macd,
+        histogram:
+            macd -
+            (signal ?? macd)
+
+    };
+
+}
+
+
+/* =========================================================
+   ATR
+========================================================= */
+
+function calculateATR(
+    bars,
+    period=14
+){
+
+    if(
+        !bars ||
+        bars.length < period+1
+    ){
+
+        return null;
+
+    }
+
+    const trs = [];
+
+    for(
+        let i=1;
+
+        i<bars.length;
+
+        i++
+    ){
+
+        const high =
+            bars[i].high;
+
+        const low =
+            bars[i].low;
+
+        const prevClose =
+            bars[i-1].close;
+
+        const tr =
+            Math.max(
+
+                high-low,
+
+                Math.abs(
+                    high-prevClose
+                ),
+
+                Math.abs(
+                    low-prevClose
+                )
+
+            );
+
+        trs.push(tr);
+
+    }
+
+    return sma(
+        trs,
+        period
+    );
 
 }
 
@@ -1621,59 +1748,105 @@ function calculateMACD(values){
    MARKET STRUCTURE
 ========================================================= */
 
-function calculateStructure(candles){
+function getStructure(
+    bars
+){
 
     if(
-        !candles ||
-        candles.length < 6
+        !bars ||
+        bars.length < 20
     ){
 
-        return 0;
+        return {
+
+            value:"NEUTRAL",
+            score:0
+
+        };
 
     }
 
-    const last =
-        candles.length - 1;
+    const recent =
+        bars.slice(-20);
 
-    const currentHigh =
-        Number(
-            candles[last].high
+    const half =
+        Math.floor(
+            recent.length/2
         );
 
-    const previousHigh =
-        Number(
-            candles[last-2].high
+    const first =
+        recent.slice(
+            0,
+            half
         );
 
-    const currentLow =
-        Number(
-            candles[last].low
+    const second =
+        recent.slice(
+            half
         );
 
-    const previousLow =
-        Number(
-            candles[last-2].low
+    const high1 =
+        Math.max(
+            ...first.map(
+                x=>x.high
+            )
+        );
+
+    const high2 =
+        Math.max(
+            ...second.map(
+                x=>x.high
+            )
+        );
+
+    const low1 =
+        Math.min(
+            ...first.map(
+                x=>x.low
+            )
+        );
+
+    const low2 =
+        Math.min(
+            ...second.map(
+                x=>x.low
+            )
         );
 
     if(
-        currentHigh > previousHigh &&
-        currentLow > previousLow
+        high2 > high1 &&
+        low2 > low1
     ){
 
-        return 1;
+        return {
+
+            value:"BULLISH ↑",
+            score:1
+
+        };
 
     }
 
     if(
-        currentHigh < previousHigh &&
-        currentLow < previousLow
+        high2 < high1 &&
+        low2 < low1
     ){
 
-        return -1;
+        return {
+
+            value:"BEARISH ↓",
+            score:-1
+
+        };
 
     }
 
-    return 0;
+    return {
+
+        value:"RANGE →",
+        score:0
+
+    };
 
 }
 
@@ -1682,58 +1855,58 @@ function calculateStructure(candles){
    TIMEFRAME ANALYSIS
 ========================================================= */
 
-function analyzeTimeframe(candles){
+function analyzeTimeframe(
+    bars
+){
 
     if(
-        !candles ||
-        candles.length < 50
+        !bars ||
+        bars.length < 60
     ){
 
         return {
 
             trend:0,
-            score:0,
             rsi:50,
             macd:0,
-            atr:0,
-            structure:0,
-            ema20:0,
-            ema50:0,
-            ema200:0
+            atr:null,
+            ema20:null,
+            ema50:null,
+            ema200:null,
+            structure:"NEUTRAL",
+            structureScore:0,
+            score:0
 
         };
 
     }
 
     const closes =
-        candles.map(
-            c => Number(c.close)
+        bars.map(
+            b=>b.close
         );
 
-    const current =
+    const last =
         closes[
-            closes.length - 1
+            closes.length-1
         ];
 
-    const ema20 =
-        calculateEMA(
+    const e20 =
+        ema(
             closes,
             20
         );
 
-    const ema50 =
-        calculateEMA(
+    const e50 =
+        ema(
             closes,
             50
         );
 
-    const ema200 =
-        calculateEMA(
+    const e200 =
+        ema(
             closes,
-            Math.min(
-                200,
-                closes.length
-            )
+            200
         );
 
     const rsi =
@@ -1749,91 +1922,92 @@ function analyzeTimeframe(candles){
 
     const atr =
         calculateATR(
-            candles,
+            bars,
             14
         );
 
     const structure =
-        calculateStructure(
-            candles
+        getStructure(
+            bars
         );
 
     let score = 0;
 
-
     /*
-       EMA20 / EMA50
+       EMA trend
     */
 
     if(
-        ema20 >
-        ema50
+        e20 !== null &&
+        e50 !== null
     ){
 
-        score += 2;
+        if(
+            e20 > e50
+        ){
+
+            score += 2;
+
+        }
+
+        else if(
+            e20 < e50
+        ){
+
+            score -= 2;
+
+        }
 
     }
-
-    else if(
-        ema20 <
-        ema50
-    ){
-
-        score -= 2;
-
-    }
-
 
     /*
-       Price / EMA200
+       EMA 200
     */
 
     if(
-        current >
-        ema200
+        e200 !== null
     ){
 
-        score += 2;
+        if(
+            last > e200
+        ){
+
+            score += 2;
+
+        }
+
+        else if(
+            last < e200
+        ){
+
+            score -= 2;
+
+        }
 
     }
-
-    else if(
-        current <
-        ema200
-    ){
-
-        score -= 2;
-
-    }
-
 
     /*
        RSI
     */
 
-    if(
-        rsi > 55
-    ){
+    if(rsi > 55){
 
         score += 1;
 
     }
 
-    else if(
-        rsi < 45
-    ){
+    else if(rsi < 45){
 
         score -= 1;
 
     }
-
 
     /*
        MACD
     */
 
     if(
-        macd > 0
+        macd.histogram > 0
     ){
 
         score += 1;
@@ -1841,52 +2015,58 @@ function analyzeTimeframe(candles){
     }
 
     else if(
-        macd < 0
+        macd.histogram < 0
     ){
 
         score -= 1;
 
     }
 
-
     /*
        Structure
     */
 
     score +=
-        structure;
-
+        structure.score;
 
     let trend = 0;
 
-    if(
-        score >= 3
-    ){
+    if(score >= 3){
 
         trend = 1;
 
     }
 
-    else if(
-        score <= -3
-    ){
+    else if(score <= -3){
 
         trend = -1;
 
     }
 
-
     return {
 
         trend,
-        score,
+
         rsi,
-        macd,
+
+        macd:
+            macd.histogram,
+
         atr,
-        structure,
-        ema20,
-        ema50,
-        ema200
+
+        ema20:e20,
+
+        ema50:e50,
+
+        ema200:e200,
+
+        structure:
+            structure.value,
+
+        structureScore:
+            structure.score,
+
+        score
 
     };
 
@@ -1894,27 +2074,33 @@ function analyzeTimeframe(candles){
 
 
 /* =========================================================
-   TREND UI
+   SET TREND UI
 ========================================================= */
 
-function renderTrend(
+function setTrendUI(
     id,
-    analysis
+    detailId,
+    result
 ){
 
     const el =
         $(id);
 
+    const detail =
+        $(detailId);
+
     if(!el){
+
         return;
+
     }
 
     if(
-        analysis.trend === 1
+        result.trend > 0
     ){
 
         el.textContent =
-            "BULLISH ↑";
+            "UP ↑";
 
         el.className =
             "box-value green";
@@ -1922,11 +2108,11 @@ function renderTrend(
     }
 
     else if(
-        analysis.trend === -1
+        result.trend < 0
     ){
 
         el.textContent =
-            "BEARISH ↓";
+            "DOWN ↓";
 
         el.className =
             "box-value red";
@@ -1936,10 +2122,21 @@ function renderTrend(
     else{
 
         el.textContent =
-            "NEUTRAL";
+            "SIDEWAYS →";
 
         el.className =
             "box-value yellow";
+
+    }
+
+    if(detail){
+
+        detail.textContent =
+            `RSI ${result.rsi.toFixed(1)} • MACD ${
+                result.macd >= 0
+                ? "↑"
+                : "↓"
+            } • ${result.structure}`;
 
     }
 
@@ -1950,11 +2147,13 @@ function renderTrend(
    SUPPORT / RESISTANCE
 ========================================================= */
 
-function calculateLevels(candles){
+function calculateLevels(
+    bars
+){
 
     if(
-        !candles ||
-        candles.length < 20
+        !bars ||
+        bars.length < 30
     ){
 
         return null;
@@ -1962,63 +2161,91 @@ function calculateLevels(candles){
     }
 
     const recent =
-        candles.slice(-20);
+        bars.slice(-80);
 
     const highs =
         recent.map(
-            c => Number(c.high)
+            b=>b.high
         );
 
     const lows =
         recent.map(
-            c => Number(c.low)
+            b=>b.low
         );
 
-    const closes =
-        recent.map(
-            c => Number(c.close)
+    /*
+       Swing levels
+    */
+
+    const swingHighs = [];
+
+    const swingLows = [];
+
+    for(
+        let i=2;
+
+        i<recent.length-2;
+
+        i++
+    ){
+
+        const h =
+            recent[i].high;
+
+        const l =
+            recent[i].low;
+
+        if(
+            h > recent[i-1].high &&
+            h > recent[i-2].high &&
+            h > recent[i+1].high &&
+            h > recent[i+2].high
+        ){
+
+            swingHighs.push(h);
+
+        }
+
+        if(
+            l < recent[i-1].low &&
+            l < recent[i-2].low &&
+            l < recent[i+1].low &&
+            l < recent[i+2].low
+        ){
+
+            swingLows.push(l);
+
+        }
+
+    }
+
+    const sortedHighs =
+        [...swingHighs]
+        .sort(
+            (a,b)=>b-a
         );
 
-    const high =
-        Math.max(...highs);
-
-    const low =
-        Math.min(...lows);
-
-    const close =
-        closes[
-            closes.length - 1
-        ];
-
-    const pivot =
-        (
-            high +
-            low +
-            close
-        ) / 3;
+    const sortedLows =
+        [...swingLows]
+        .sort(
+            (a,b)=>a-b
+        );
 
     const r1 =
-        2 * pivot - low;
-
-    const s1 =
-        2 * pivot - high;
+        sortedHighs[0] ??
+        Math.max(...highs);
 
     const r2 =
-        pivot +
-        (
-            high - low
-        );
+        sortedHighs[1] ??
+        Math.max(...highs);
+
+    const s1 =
+        sortedLows[0] ??
+        Math.min(...lows);
 
     const s2 =
-        pivot -
-        (
-            high - low
-        );
-
-    setText(
-        "r2",
-        priceFormat(r2)
-    );
+        sortedLows[1] ??
+        Math.min(...lows);
 
     setText(
         "r1",
@@ -2026,8 +2253,8 @@ function calculateLevels(candles){
     );
 
     setText(
-        "pivot",
-        priceFormat(pivot)
+        "r2",
+        priceFormat(r2)
     );
 
     setText(
@@ -2042,15 +2269,16 @@ function calculateLevels(candles){
 
     return {
 
-        r2,
         r1,
-        pivot,
+        r2,
         s1,
         s2
 
     };
 
 }
+
+
 /* =========================================================
    NEWS
 ========================================================= */
@@ -2061,12 +2289,20 @@ async function getNews(){
 
         const response =
             await fetch(
-                API +
-                "/calendar" +
-                "?countries=US,EU,GB" +
-                "&importance=high" +
-                "&limit=50"
+                `${API}/calendar?countries=US,EU,GB&importance=high&limit=50`,
+                {
+                    cache:"no-store"
+                }
             );
+
+        if(!response.ok){
+
+            throw new Error(
+                "Calendar HTTP " +
+                response.status
+            );
+
+        }
 
         const data =
             await response.json();
@@ -2074,69 +2310,107 @@ async function getNews(){
         const events =
             Array.isArray(data)
             ? data
-            : (
-                data.events ||
-                data.data ||
-                []
-            );
+            : [];
 
         const now =
             Date.now();
 
-        const thirtyMinutes =
-            30 * 60 * 1000;
+        /*
+           منع التداول إذا كان هناك
+           خبر عالي التأثير ضمن
+           30 دقيقة قبل أو بعد الوقت الحالي.
+        */
 
-        newsBlocked =
-            events.some(
+        const dangerous =
+            events.filter(
                 event => {
 
-                    const eventTime =
-                        new Date(
+                    const t =
+                        Date.parse(
                             event.time
-                        ).getTime();
+                        );
 
                     if(
-                        !isFinite(eventTime)
+                        !Number.isFinite(t)
                     ){
 
                         return false;
 
                     }
 
-                    return (
+                    const diff =
                         Math.abs(
-                            eventTime - now
-                        ) <=
-                        thirtyMinutes
+                            t-now
+                        );
+
+                    return (
+                        diff <=
+                        30*60*1000
                     );
 
                 }
             );
 
+        newsBlocked =
+            dangerous.length > 0;
 
         const risk =
             $("newsRisk");
 
-        if(newsBlocked){
+        if(
+            dangerous.length
+        ){
 
             risk.className =
                 "risk risk-danger";
 
             risk.textContent =
-                "🔴 خبر عالي التأثير قريب • التداول متوقف";
+                "🔴 خطر أخبار مرتفع • WAIT";
 
         }
 
         else{
 
-            risk.className =
-                "risk risk-safe";
+            const upcoming =
+                events.filter(
+                    event => {
 
-            risk.textContent =
-                "🟢 لا يوجد خبر عالي التأثير قريب";
+                        const t =
+                            Date.parse(
+                                event.time
+                            );
+
+                        return (
+                            Number.isFinite(t) &&
+                            t > now &&
+                            t-now <
+                            2*60*60*1000
+                        );
+
+                    }
+                );
+
+            if(upcoming.length){
+
+                risk.className =
+                    "risk risk-warning";
+
+                risk.textContent =
+                    "🟡 يوجد خبر قوي قريب";
+
+            }
+
+            else{
+
+                risk.className =
+                    "risk risk-safe";
+
+                risk.textContent =
+                    "🟢 لا يوجد خبر عالي التأثير قريب";
+
+            }
 
         }
-
 
         const container =
             $("news");
@@ -2153,7 +2427,6 @@ async function getNews(){
             return;
 
         }
-
 
         container.innerHTML =
             events
@@ -2280,40 +2553,19 @@ function calculateTradeLevels(
 
     }
 
-
     if(
         signal === "WAIT"
     ){
 
-        setText(
-            "entry",
-            "-"
-        );
-
-        setText(
-            "sl",
-            "-"
-        );
-
-        setText(
-            "tp1",
-            "-"
-        );
-
-        setText(
-            "tp2",
-            "-"
-        );
-
-        setText(
-            "rr",
-            "Risk / Reward: -"
-        );
+        setText("entry","-");
+        setText("sl","-");
+        setText("tp1","-");
+        setText("tp2","-");
+        setText("rr","Risk / Reward: -");
 
         return;
 
     }
-
 
     const entry =
         marketPrice;
@@ -2322,20 +2574,18 @@ function calculateTradeLevels(
 
     let risk;
 
-
     if(
         signal === "BUY"
     ){
 
         const atrSL =
             entry -
-            atr * 1.5;
+            atr*1.5;
 
         const supportSL =
             levels &&
             levels.s1 < entry
-            ? levels.s1 -
-              atr * 0.25
+            ? levels.s1 - atr*0.25
             : atrSL;
 
         sl =
@@ -2345,7 +2595,7 @@ function calculateTradeLevels(
             );
 
         risk =
-            entry - sl;
+            entry-sl;
 
     }
 
@@ -2353,13 +2603,12 @@ function calculateTradeLevels(
 
         const atrSL =
             entry +
-            atr * 1.5;
+            atr*1.5;
 
         const resistanceSL =
             levels &&
             levels.r1 > entry
-            ? levels.r1 +
-              atr * 0.25
+            ? levels.r1 + atr*0.25
             : atrSL;
 
         sl =
@@ -2369,10 +2618,9 @@ function calculateTradeLevels(
             );
 
         risk =
-            sl - entry;
+            sl-entry;
 
     }
-
 
     /*
        حماية من Stop Loss
@@ -2381,10 +2629,9 @@ function calculateTradeLevels(
 
     const minimumRisk =
         Math.max(
-            atr * 0.8,
+            atr*0.8,
             0.5
         );
-
 
     if(
         risk < minimumRisk
@@ -2395,16 +2642,14 @@ function calculateTradeLevels(
         ){
 
             sl =
-                entry -
-                minimumRisk;
+                entry-minimumRisk;
 
         }
 
         else{
 
             sl =
-                entry +
-                minimumRisk;
+                entry+minimumRisk;
 
         }
 
@@ -2413,38 +2658,34 @@ function calculateTradeLevels(
 
     }
 
-
     let tp1;
-
     let tp2;
-
 
     if(
         signal === "BUY"
     ){
 
         tp1 =
-            entry +
-            risk * 1.5;
+            entry+
+            risk*1.5;
 
         tp2 =
-            entry +
-            risk * 2.5;
+            entry+
+            risk*2.5;
 
     }
 
     else{
 
         tp1 =
-            entry -
-            risk * 1.5;
+            entry-
+            risk*1.5;
 
         tp2 =
-            entry -
-            risk * 2.5;
+            entry-
+            risk*2.5;
 
     }
-
 
     setText(
         "entry",
@@ -2492,7 +2733,6 @@ function analyzeMarket(){
     const b1h =
         marketData["1H"];
 
-
     if(
         !b5.length ||
         !b15.length ||
@@ -2500,88 +2740,55 @@ function analyzeMarket(){
         !b1h.length
     ){
 
-        return null;
+        setText(
+            "signalReason",
+            "⚠️ لم تصل بيانات جميع الفريمات"
+        );
+
+        return;
 
     }
 
-
     const a5 =
-        analyzeTimeframe(
-            b5
-        );
+        analyzeTimeframe(b5);
 
     const a15 =
-        analyzeTimeframe(
-            b15
-        );
+        analyzeTimeframe(b15);
 
     const a30 =
-        analyzeTimeframe(
-            b30
-        );
+        analyzeTimeframe(b30);
 
     const a1h =
-        analyzeTimeframe(
-            b1h
-        );
+        analyzeTimeframe(b1h);
 
 
-    /*
-       Trend UI
-    */
-
-    renderTrend(
+    setTrendUI(
         "trend5",
+        "detail5",
         a5
     );
 
-    renderTrend(
+    setTrendUI(
         "trend15",
+        "detail15",
         a15
     );
 
-    renderTrend(
+    setTrendUI(
         "trend30",
+        "detail30",
         a30
     );
 
-    renderTrend(
-        "trend1h",
+    setTrendUI(
+        "trend60",
+        "detail60",
         a1h
     );
 
 
     /*
-       Trend details
-    */
-
-    setText(
-        "detail5",
-        "Score: " +
-        a5.score
-    );
-
-    setText(
-        "detail15",
-        "Score: " +
-        a15.score
-    );
-
-    setText(
-        "detail30",
-        "Score: " +
-        a30.score
-    );
-
-    setText(
-        "detail1h",
-        "Score: " +
-        a1h.score
-    );
-
-
-    /*
-       Indicator UI
+       5M indicators
     */
 
     setText(
@@ -2591,49 +2798,45 @@ function analyzeMarket(){
 
     setText(
         "macd",
-        a5.macd.toFixed(3)
+        a5.macd >= 0
+        ? "BULLISH ↑"
+        : "BEARISH ↓"
     );
 
     setText(
         "atr",
-        a5.atr.toFixed(2)
+        a5.atr
+        ? priceFormat(a5.atr)
+        : "-"
     );
-
 
     setText(
         "structure",
-        a5.structure === 1
-        ? "BULLISH"
-        : a5.structure === -1
-        ? "BEARISH"
-        : "NEUTRAL"
+        a5.structure
     );
-
 
     setText(
         "ema20",
-        priceFormat(
-            a5.ema20
-        )
+        a5.ema20
+        ? priceFormat(a5.ema20)
+        : "-"
     );
 
     setText(
         "ema50",
-        priceFormat(
-            a5.ema50
-        )
-    );
-
-    setText(
-        "ema200",
-        priceFormat(
-            a5.ema200
-        )
+        a5.ema50
+        ? priceFormat(a5.ema50)
+        : "-"
     );
 
 
     /*
-       Weighted score
+       Weighted multi-timeframe score
+
+       5M  = 1
+       15M = 2
+       30M = 2
+       1H  = 3
     */
 
     let score = 0;
@@ -2700,7 +2903,6 @@ function analyzeMarket(){
     let signal =
         "WAIT";
 
-
     if(
         score >= 10
     ){
@@ -2722,6 +2924,9 @@ function analyzeMarket(){
 
     /*
        News filter
+
+       إذا خبر عالي التأثير
+       قريب جداً، لا ندخل.
     */
 
     if(newsBlocked){
@@ -2733,7 +2938,8 @@ function analyzeMarket(){
 
 
     /*
-       Confidence
+       Confidence = قوة توافق
+       المؤشرات وليس احتمال ربح.
     */
 
     const maxScore =
@@ -2751,7 +2957,6 @@ function analyzeMarket(){
             ) *
             45
         );
-
 
     if(
         signal === "WAIT"
@@ -2805,7 +3010,6 @@ function analyzeMarket(){
 
     let reason = "";
 
-
     if(newsBlocked){
 
         reason =
@@ -2837,7 +3041,6 @@ function analyzeMarket(){
             "🟡 لا يوجد توافق كافٍ للدخول";
 
     }
-
 
     setText(
         "signalReason",
@@ -2901,7 +3104,9 @@ function analyzeMarket(){
         );
 
     }
-        /*
+
+
+    /*
        Market strength
     */
 
@@ -2910,7 +3115,7 @@ function analyzeMarket(){
             Math.min(
                 100,
                 35 +
-                Math.abs(score) * 3
+                Math.abs(score)*3
             )
         );
 
@@ -2931,13 +3136,13 @@ function analyzeMarket(){
                 100,
                 Math.round(
                     50 +
-                    score * 2.5
+                    score*2.5
                 )
             )
         );
 
     const downScore =
-        100 - upScore;
+        100-upScore;
 
     setText(
         "upProbability",
@@ -2988,6 +3193,96 @@ function analyzeMarket(){
 
 
 /* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+async function enableNotifications(){
+
+    const status =
+        $("notificationStatus");
+
+    const pushState =
+        $("pushState");
+
+    try{
+
+        const OneSignal =
+            window.OneSignalInstance;
+
+        if(!OneSignal){
+
+            status.textContent =
+                "🟡 نظام الإشعارات لم يجهز بعد";
+
+            return;
+
+        }
+
+        if(
+            !OneSignal
+                .Notifications
+                .isPushSupported()
+        ){
+
+            status.textContent =
+                "🔴 المتصفح لا يدعم Web Push";
+
+            pushState.textContent =
+                "🔴 غير مدعوم";
+
+            return;
+
+        }
+
+        const granted =
+            await OneSignal
+                .Notifications
+                .requestPermission();
+
+        if(!granted){
+
+            status.textContent =
+                "🔴 لم يتم السماح بالإشعارات";
+
+            pushState.textContent =
+                "🔴 مرفوض";
+
+            return;
+
+        }
+
+        await OneSignal
+            .User
+            .PushSubscription
+            .optIn();
+
+        status.textContent =
+            "🟢 تم تفعيل إشعارات الإشارة";
+
+        pushState.textContent =
+            "🟢 مفعل";
+
+    }
+
+    catch(error){
+
+        console.error(
+            error
+        );
+
+        status.textContent =
+            "🔴 حدث خطأ في الإشعارات";
+
+        pushState.textContent =
+            "🔴 خطأ";
+
+    }
+
+}
+
+
+
+/* =========================================================
    SIGNAL LOG / SIMPLE BACKTEST
 ========================================================= */
 
@@ -3005,64 +3300,40 @@ function addSignalToHistory(result){
 
     if(
         !result ||
-        (
-            result.signal !== "BUY" &&
-            result.signal !== "SELL"
-        )
+        (result.signal !== "BUY" && result.signal !== "SELL")
     ){
-
         return;
-
     }
-
 
     /*
        لا نسجل نفس الإشارة أكثر من مرة.
        نسجل فقط عند ظهور BUY/SELL جديد.
     */
-
     if(
         lastSignal === result.signal
     ){
-
         return;
-
     }
 
-
     const entry =
-        Number(
-            marketPrice
-        );
+        Number(marketPrice);
 
     const atr =
-        Number(
-            result.a5 &&
-            result.a5.atr
-        );
-
+        Number(result.a5 && result.a5.atr);
 
     if(
         !entry ||
         !atr ||
         atr <= 0
     ){
-
         return;
-
     }
 
-
     let sl;
-
     let tp1;
-
     let tp2;
 
-
-    if(
-        result.signal === "BUY"
-    ){
+    if(result.signal === "BUY"){
 
         sl =
             entry -
@@ -3100,7 +3371,6 @@ function addSignalToHistory(result){
 
     }
 
-
     signalHistory.unshift({
 
         id:
@@ -3135,7 +3405,6 @@ function addSignalToHistory(result){
 
     });
 
-
     if(
         signalHistory.length >
         SIGNAL_HISTORY_LIMIT
@@ -3148,7 +3417,6 @@ function addSignalToHistory(result){
             );
 
     }
-
 
     saveSignalHistory();
 
@@ -3163,111 +3431,67 @@ function updateSignalResults(){
         !marketPrice ||
         !signalHistory.length
     ){
-
         return;
-
     }
 
+    let changed = false;
 
-    let changed =
-        false;
+    signalHistory.forEach(item => {
 
+        if(item.result !== "PENDING"){
+            return;
+        }
 
-    signalHistory.forEach(
-        item => {
+        const price =
+            Number(marketPrice);
 
-            if(
-                item.result !==
-                "PENDING"
-            ){
+        if(item.signal === "BUY"){
 
-                return;
+            if(price >= item.tp2){
 
-            }
+                item.result = "WIN";
 
-
-            const price =
-                Number(
-                    marketPrice
-                );
-
-
-            if(
-                item.signal ===
-                "BUY"
-            ){
-
-                if(
-                    price >=
-                    item.tp2
-                ){
-
-                    item.result =
-                        "WIN";
-
-                    changed =
-                        true;
-
-                }
-
-                else if(
-                    price <=
-                    item.sl
-                ){
-
-                    item.result =
-                        "LOSS";
-
-                    changed =
-                        true;
-
-                }
+                changed = true;
 
             }
 
-            else if(
-                item.signal ===
-                "SELL"
-            ){
+            else if(price <= item.sl){
 
-                if(
-                    price <=
-                    item.tp2
-                ){
+                item.result = "LOSS";
 
-                    item.result =
-                        "WIN";
-
-                    changed =
-                        true;
-
-                }
-
-                else if(
-                    price >=
-                    item.sl
-                ){
-
-                    item.result =
-                        "LOSS";
-
-                    changed =
-                        true;
-
-                }
+                changed = true;
 
             }
 
         }
-    );
 
+        else if(item.signal === "SELL"){
+
+            if(price <= item.tp2){
+
+                item.result = "WIN";
+
+                changed = true;
+
+            }
+
+            else if(price >= item.sl){
+
+                item.result = "LOSS";
+
+                changed = true;
+
+            }
+
+        }
+
+    });
 
     if(changed){
 
         saveSignalHistory();
 
     }
-
 
     renderSignalHistory();
 
@@ -3279,41 +3503,27 @@ function renderSignalHistory(){
     const container =
         $("signalLog");
 
-
     if(!container){
-
         return;
-
     }
-
 
     const total =
         signalHistory.length;
 
-
     const wins =
         signalHistory.filter(
-            x =>
-                x.result ===
-                "WIN"
+            x => x.result === "WIN"
         ).length;
-
 
     const losses =
         signalHistory.filter(
-            x =>
-                x.result ===
-                "LOSS"
+            x => x.result === "LOSS"
         ).length;
-
 
     const pending =
         signalHistory.filter(
-            x =>
-                x.result ===
-                "PENDING"
+            x => x.result === "PENDING"
         ).length;
-
 
     setText(
         "logTotal",
@@ -3335,155 +3545,112 @@ function renderSignalHistory(){
         pending
     );
 
-
-    if(
-        !signalHistory.length
-    ){
+    if(!signalHistory.length){
 
         container.innerHTML =
-            `
-            <div class="status">
+            `<div class="status">
                 لا توجد إشارات BUY/SELL مسجلة بعد
-            </div>
-            `;
+             </div>`;
 
         return;
 
     }
 
-
     container.innerHTML =
         signalHistory
         .slice(0,20)
-        .map(
-            item => {
+        .map(item => {
 
-                const time =
-                    new Date(
-                        item.time
-                    )
-                    .toLocaleString(
-                        "ar-IQ",
-                        {
-                            day:"2-digit",
-                            month:"2-digit",
-                            hour:"2-digit",
-                            minute:"2-digit"
-                        }
-                    );
+            const time =
+                new Date(item.time)
+                .toLocaleString(
+                    "ar-IQ",
+                    {
+                        day:"2-digit",
+                        month:"2-digit",
+                        hour:"2-digit",
+                        minute:"2-digit"
+                    }
+                );
 
+            let resultText =
+                "⏳ قيد المتابعة";
 
-                let resultText =
-                    "⏳ قيد المتابعة";
+            let resultClass =
+                "yellow";
 
-                let resultClass =
-                    "yellow";
+            if(item.result === "WIN"){
 
+                resultText =
+                    "✅ ناجحة";
 
-                if(
-                    item.result ===
-                    "WIN"
-                ){
-
-                    resultText =
-                        "✅ ناجحة";
-
-                    resultClass =
-                        "green";
-
-                }
-
-                else if(
-                    item.result ===
-                    "LOSS"
-                ){
-
-                    resultText =
-                        "❌ خاسرة";
-
-                    resultClass =
-                        "red";
-
-                }
-
-
-                const signalClass =
-                    item.signal ===
-                    "BUY"
-                    ? "green"
-                    : "red";
-
-
-                return `
-                    <div class="news-item">
-
-                        <strong
-                            class="${signalClass}">
-
-                            ${item.signal}
-
-                        </strong>
-
-                        &nbsp; • &nbsp;
-
-                        <span
-                            class="${resultClass}">
-
-                            ${resultText}
-
-                        </span>
-
-                        <br>
-
-                        <span class="small">
-
-                            ${time}
-
-                            &nbsp; | &nbsp;
-
-                            Entry:
-                            ${Number(
-                                item.entry
-                            ).toFixed(2)}
-
-                            &nbsp; | &nbsp;
-
-                            SL:
-                            ${Number(
-                                item.sl
-                            ).toFixed(2)}
-
-                            &nbsp; | &nbsp;
-
-                            TP2:
-                            ${Number(
-                                item.tp2
-                            ).toFixed(2)}
-
-                        </span>
-
-                        <br>
-
-                        <span class="small">
-
-                            قوة:
-                            ${item.confidence}%
-
-                            &nbsp; | &nbsp;
-
-                            Score:
-                            ${item.score}
-
-                        </span>
-
-                    </div>
-                `;
+                resultClass =
+                    "green";
 
             }
-        )
+
+            else if(item.result === "LOSS"){
+
+                resultText =
+                    "❌ خاسرة";
+
+                resultClass =
+                    "red";
+
+            }
+
+            const signalClass =
+                item.signal === "BUY"
+                ? "green"
+                : "red";
+
+            return `
+                <div class="news-item">
+
+                    <strong class="${signalClass}">
+                        ${item.signal}
+                    </strong>
+
+                    &nbsp; • &nbsp;
+
+                    <span class="${resultClass}">
+                        ${resultText}
+                    </span>
+
+                    <br>
+
+                    <span class="small">
+                        ${time}
+                        &nbsp; | &nbsp;
+                        Entry:
+                        ${Number(item.entry).toFixed(2)}
+                        &nbsp; | &nbsp;
+                        SL:
+                        ${Number(item.sl).toFixed(2)}
+                        &nbsp; | &nbsp;
+                        TP2:
+                        ${Number(item.tp2).toFixed(2)}
+                    </span>
+
+                    <br>
+
+                    <span class="small">
+                        قوة:
+                        ${item.confidence}%
+                        &nbsp; | &nbsp;
+                        Score:
+                        ${item.score}
+                    </span>
+
+                </div>
+            `;
+
+        })
         .join("");
 
 }
+
+
 /* =========================================================
    MAIN UPDATE
 ========================================================= */
@@ -3532,7 +3699,6 @@ async function updateAll(){
     const now =
         new Date();
 
-
     setText(
         "updateStatus",
         "🟢 آخر تحديث: " +
@@ -3545,22 +3711,16 @@ async function updateAll(){
             }
         )
     );
-
-
     /*
        6. سجل الإشارة الجديدة
     */
 
     if(result){
 
-        addSignalToHistory(
-            result
-        );
-
+        addSignalToHistory(result);
 
         if(
-            result.signal !==
-            lastSignal
+            result.signal !== lastSignal
         ){
 
             console.log(
@@ -3568,14 +3728,12 @@ async function updateAll(){
                 result.signal
             );
 
-
             lastSignal =
                 result.signal;
 
         }
 
     }
-
 
     /*
        7. تحديث نتائج الإشارات السابقة
@@ -3592,7 +3750,6 @@ async function updateAll(){
 
 renderSignalHistory();
 
-
 updateAll();
 
 
@@ -3608,5 +3765,4 @@ setInterval(
 </script>
 
 </body>
-
 </html>
