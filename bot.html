@@ -933,6 +933,15 @@ OneSignalDeferred.push(
 
     </button>
 
+    <button
+        class="button notification"
+        onclick="testSignalNotification()"
+        style="margin-top:10px;">
+
+        🧪 اختبار إشعار الصفقة
+
+    </button>
+
     <div
         id="notificationStatus"
         class="status">
@@ -3312,6 +3321,58 @@ let signalNotificationReady =
 
 let lastNotifiedSignal =
     localStorage.getItem("xauusd_last_notified_signal") || "WAIT";
+
+
+async function testSignalNotification(){
+
+    const status = $("notificationStatus");
+
+    try{
+
+        if(!(("Notification" in window))){
+            status.textContent =
+                "🔴 هذا المتصفح لا يدعم إشعارات المتصفح";
+            return;
+        }
+
+        if(Notification.permission !== "granted"){
+            const permission =
+                await Notification.requestPermission();
+
+            if(permission !== "granted"){
+                status.textContent =
+                    "🔴 لم يتم السماح بالإشعارات";
+                return;
+            }
+        }
+
+        const entry = Number($("entry")?.textContent) || 0;
+        const sl = Number($("sl")?.textContent) || 0;
+        const tp1 = Number($("tp1")?.textContent) || 0;
+        const tp2 = Number($("tp2")?.textContent) || 0;
+
+        new Notification("🧪 اختبار صفقة XAUUSD", {
+            body:
+                "BUY XAUUSD\n" +
+                "Entry: " + entry + "\n" +
+                "SL: " + sl + " | TP1: " + tp1 + " | TP2: " + tp2,
+            tag: "xauusd-signal-test",
+            renotify: true
+        });
+
+        status.textContent =
+            "🟢 تم إرسال إشعار الاختبار";
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        status.textContent =
+            "🔴 فشل اختبار الإشعار";
+    }
+
+}
 
 
 async function notifyNewSignal(result){
