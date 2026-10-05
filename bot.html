@@ -3256,11 +3256,32 @@ async function enableNotifications(){
             .PushSubscription
             .optIn();
 
-        status.textContent =
-            "🟢 تم تفعيل إشعارات الإشارة";
+        /*
+           نستخدم أيضاً إشعارات المتصفح المحلية
+           عند تغير BUY/SELL.
+        */
+        if(
+            "Notification" in window &&
+            Notification.permission === "granted"
+        ){
 
-        pushState.textContent =
-            "🟢 مفعل";
+            status.textContent =
+                "🟢 تم تفعيل إشعارات الإشارة";
+
+            pushState.textContent =
+                "🟢 مفعل";
+
+        }
+
+        else{
+
+            status.textContent =
+                "🟡 OneSignal مفعل لكن إشعار المتصفح غير متاح";
+
+            pushState.textContent =
+                "🟡 جزئياً";
+
+        }
 
     }
 
@@ -3280,6 +3301,127 @@ async function enableNotifications(){
 
 }
 
+
+
+/* =========================================================
+   SIGNAL NOTIFICATION
+========================================================= */
+
+let signalNotificationReady =
+    localStorage.getItem("xauusd_notification_ready") === "1";
+
+let lastNotifiedSignal =
+    localStorage.getItem("xauusd_last_notified_signal") || "WAIT";
+
+
+async function notifyNewSignal(result){
+
+    if(
+        !result ||
+        (result.signal !== "BUY" && result.signal !== "SELL")
+    ){
+        return;
+    }
+
+    const entry =
+        Number($("entry")?.textContent);
+
+    const sl =
+        Number($("sl")?.textContent);
+
+    const tp1 =
+        Number($("tp1")?.textContent);
+
+    const tp2 =
+        Number($("tp2")?.textContent);
+
+    const title =
+        result.signal === "BUY"
+        ? "🟢 BUY XAUUSD"
+        : "🔴 SELL XAUUSD";
+
+    const body =
+        "Entry: " + priceFormat(entry) +
+        " | SL: " + priceFormat(sl) +
+        " | TP1: " + priceFormat(tp1) +
+        " | TP2: " + priceFormat(tp2) +
+        " | القوة: " + result.confidence + "%";
+
+    try{
+
+        if(
+            "Notification" in window &&
+            Notification.permission === "granted"
+        ){
+
+            new Notification(
+                title,
+                {
+                    body: body,
+                    tag: "xauusd-signal-" + result.signal,
+                    renotify: true
+                }
+            );
+
+        }
+
+        lastNotifiedSignal =
+            result.signal;
+
+        localStorage.setItem(
+            "xauusd_last_notified_signal",
+            result.signal
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Signal notification error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   INITIAL NOTIFICATION STATE
+========================================================= */
+
+/*
+   لا نرسل إشعاراً عند أول فتح للموقع.
+   ننتظر تغير الإشارة فعلياً.
+*/
+
+function initializeNotificationState(result){
+
+    if(!result){
+        return;
+    }
+
+    if(!signalNotificationReady){
+
+        lastNotifiedSignal =
+            result.signal;
+
+        localStorage.setItem(
+            "xauusd_last_notified_signal",
+            result.signal
+        );
+
+        signalNotificationReady = true;
+
+        localStorage.setItem(
+            "xauusd_notification_ready",
+            "1"
+        );
+
+    }
+
+}
 
 
 /* =========================================================
@@ -3719,7 +3861,24 @@ async function updateAll(){
 
         addSignalToHistory(result);
 
-        if(
+        /*
+           أول تشغيل:
+           نسجل الحالة فقط بدون إشعار.
+        */
+        if(!signalNotificationReady){
+
+            initializeNotificationState(result);
+
+            lastSignal =
+                result.signal;
+
+        }
+
+        /*
+           بعد التشغيل الأول:
+           الإشعار فقط عند تغير BUY/SELL.
+        */
+        else if(
             result.signal !== lastSignal
         ){
 
@@ -3727,6 +3886,16 @@ async function updateAll(){
                 "NEW SIGNAL:",
                 result.signal
             );
+
+            if(
+                (result.signal === "BUY" ||
+                 result.signal === "SELL") &&
+                result.signal !== lastNotifiedSignal
+            ){
+
+                await notifyNewSignal(result);
+
+            }
 
             lastSignal =
                 result.signal;
